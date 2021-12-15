@@ -1,22 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Header/>
+    <ChartContainer msg="Welcome to Chart"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ChartContainer from './components/ChartContainer.vue'
+import Header from './components/Header.vue'
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ChartContainer, Header
   }
 }
+
 </script>
 
 <style>
+@import "~materialize-css/dist/css/materialize.min.css";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
