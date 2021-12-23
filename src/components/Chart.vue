@@ -7,10 +7,18 @@
     props: {
       firstChartData: [],
       secondChartData: [],
-      thirdChartData: []
+      thirdChartData: [],
+      scale: {
+        type: Number,
+        default: 1.3,
+      }
     },
     data () {
       return {
+          xMin: 0,
+          xMax: 0,
+          yMin: 0,
+          yMax: 0,
           options: {
             responsive: true,
             legend: {
@@ -18,16 +26,46 @@
             },
             scales: {
               xAxes: [{
-                suggestedMin: -2500000,
-                suggestedMax: 2500000,
                 ticks: {
-                  suggestedMin: -2500000,
-                  suggestedMax: 2500000
+                  min: this.xMin,
+                  max: this.xMax,
+                },
+                grid: {
+                  display: true,
+                  drawBorder: true,
+                  drawOnChartArea: true,
+                  drawTicks: true,
+                }
+              }],
+              yAxes: [{
+                ticks: {
+                  min: this.yMin,
+                  max: this.yMax,
+                },
+                grid: {
+                  display: true,
+                  drawBorder: true,
+                  drawOnChartArea: true,
+                  drawTicks: true,
                 }
               }]
+            },
+            tooltips: {
+              callbacks: {
+                displayColors: false,
+                label: function(tooltipItem) {
+                  const x = parseInt(tooltipItem.xLabel)
+                  const y = parseInt(tooltipItem.yLabel)
+                  return [
+                    x > 0 ? 'Compression' + ': ' + x : 'Tension' + ': ' + x,
+                    y > 0 ? 'External pressure' + ': ' + y : 'Internal Pressure' + ': ' + y
+                  ]
+                }
+              }
             }
           }
-    }},
+          }
+    },
     watch: {
       firstChartData: {
         deep: true,
@@ -47,31 +85,59 @@
           this.renderAllCharts()
         }
       },
+      scale: {
+        deep: true,
+        handler() {
+          this.renderAllCharts()
+        }
+      }
     },
   mounted () {
+    // eslint-disable-next-line no-self-assign
     this.renderAllCharts()
     },
     methods: {
     renderAllCharts () {
+        this.getMinMaxForAxes()
         this.renderChart({
           datasets: [{
             label: 'Scatter Dataset',
             data: this.firstChartData,
-            backgroundColor: 'rgb(0, 0, 229)'
+            backgroundColor: 'rgb(0, 0, 229)',
+            pointRadius: '2'
           },
             {
               label: 'Scatter Dataset',
               data: this.secondChartData,
-              backgroundColor: 'rgb(255, 108, 0)'
+              backgroundColor: 'rgb(255, 108, 0)',
+              pointRadius: '2'
             },
             {
               label: 'Scatter Dataset',
               data: this.thirdChartData,
-              backgroundColor: 'rgb(102, 204, 0)'
+              backgroundColor: 'rgb(102, 204, 0)',
+              pointRadius: '2'
             }
           ]
         }, this.options)
       },
+      getMinMaxForAxes() {
+      const allDatasets = [...this.firstChartData, ...this.secondChartData, ...this.thirdChartData]
+        const allXData = allDatasets.filter(item => item.y).map(item => item.x * 1)
+        console.log(allDatasets)
+        const allYData = allDatasets.map(item => item.y * 1).filter(item => !isNaN(item))
+        this.xMax = Math.min.apply(null, allXData)
+        this.xMin = Math.max.apply(null, allXData)
+        this.yMax = Math.max.apply(null, allYData)
+        this.yMin = Math.min.apply(null, allYData)
+        console.log('this.scale', this.scale)
+        console.log('this.xMax, this.xMin, this.yMax, this.yMin', this.xMax, this.xMin, this.yMax, this.yMin)
+        this.options.scales.xAxes[0].ticks.min = this.xMin * this.scale
+        this.options.scales.xAxes[0].ticks.max = this.xMax * this.scale
+        this.options.scales.yAxes[0].ticks.min = this.yMin * this.scale
+        this.options.scales.yAxes[0].ticks.max = this.yMax * this.scale
+        console.log('this.options.scales', this.options.scales)
+      }
     }
     /*  getVariables (outsideDiameter, insideDiameter) {
         // b32
