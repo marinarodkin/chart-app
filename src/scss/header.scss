@@ -1,0 +1,16 @@
+@import "variables";
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+
+  &__icon {
+    width: 60px;
+    height: 60px;
+
+    .material-icons {
+      font-size: $largeIconsSize;
+      cursor: pointer;
+    }
+  }
+}

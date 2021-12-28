@@ -1,11 +1,16 @@
 <template>
     <div class="row">
-      <Inputs @props="setOption"/>
       <div class="chart-wrapper">
       <Chart :variables="this.variables" :scale="axeRange" :firstChartData ="firstChartData" :secondChartData ="secondChartData" :thirdChartData ="thirdChartData"/>
         <div class="scale-wrapper">
-          <div @click.prevent='setScalePlus' class="scale scale-plus"><a href="#" class="scale-link">&#43;</a></div>
-          <div @click.prevent='setScaleMinus' class="scale scale-minus"><a href="#" class="scale-link">&#8722;</a></div>
+          <div @click.prevent='setScalePlus' class="scale scale-plus"><a href="#" class="scale-link">
+            <span class="material-icons">zoom_in
+               </span></a></div>
+          <div @click.prevent='setScaleMinus' class="scale scale-minus">
+            <a href="#" class="scale-link">
+              <span class="material-icons">zoom_out
+               </span>
+            </a></div>
         </div>
       </div>
       </div>
@@ -13,13 +18,13 @@
 
 <script>
 import Chart from './Chart.vue'
-import Inputs from './Inputs.vue'
+
 import axios from 'axios'
 
 export default {
   name: 'ChartContainer',
   components: {
-    Chart, Inputs
+    Chart
   },
   props: {
     msg: String
@@ -74,9 +79,10 @@ export default {
 </script>
 <style>
 .chart-wrapper {
-max-width: 1200px;
-max-height: 1200px;
-border: 2px solid grey;
+  max-width: 1200px;
+  min-width: 90%;
+  max-height: 1800px;
+  border: 2px solid grey;
   margin: 0 auto;
   position: relative;
 }

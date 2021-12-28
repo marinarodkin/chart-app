@@ -9,12 +9,16 @@
     "watch": "webpack --watch"
   },
   "dependencies": {
+    "@mdi/js": "^6.5.95",
     "axios": "^0.24.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "materialize-css": "^1.0.0-rc.2",
+    "mdi-vue": "^3.0.12",
     "vue": "^2.6.11",
-    "vue-chartjs": "^3.5.1"
+    "vue-chartjs": "^3.5.1",
+    "vue-cli": "^2.9.6",
+    "vue-material-design-icons": "^5.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -23,6 +27,9 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^6.0.1",
+    "sass": "^1.45.1",
+    "sass-loader": "^10.2.0",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.46.0"
   },

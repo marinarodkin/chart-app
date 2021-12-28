@@ -94,7 +94,7 @@
     },
   mounted () {
     // eslint-disable-next-line no-self-assign
-    this.renderAllCharts()
+    // this.renderAllCharts()
     },
     methods: {
     renderAllCharts () {

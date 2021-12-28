@@ -1,0 +1,36 @@
+@import "variables";
+@import "mixins";
+
+.input-window {
+  @include window();
+  width: 100%;
+  height: 35%;
+  left: 0;
+  border-top: 1px solid $colorGrey;
+  border-bottom: 1px solid $colorGrey;
+
+  &--hidden {
+    bottom: -100%;
+  }
+
+  &--show {
+    bottom: $footerHeight;
+  }
+
+  &__menu {
+    display: flex;
+    padding: 20px 30px;
+    justify-content: space-between;
+  }
+
+  &__item {
+    display: flex;
+    font-size: 20px;
+    align-items: center;
+
+    .material-icons {
+      font-size: 38px;
+      padding-right: 8px;
+    }
+  }
+}

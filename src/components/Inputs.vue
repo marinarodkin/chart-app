@@ -2,26 +2,17 @@
   <div class="input-wrapper">
     <form class="">
       <div class="">
-        <div class="title-row" style="border: none;">
-          <span class="title-start" >Values</span>
-          <span class="title title-first" >Pipe 1</span>
-          <span class="title title-second" >Pipe 2</span>
-          <span class="title title-third" >Pipe 3</span>
-        </div>
         <div class="input-row" style="border: none;">
-          <span class="value-item">Outside Diameter, inch</span>
           <input v-model="firstItem.outsideDiameter" @change="sendProperties($event)"  id="outside-diameter1" type="text" class="input-item">
           <input v-model="secondItem.outsideDiameter" @change="sendProperties($event)"  id="outside-diameter2" type="text" class="input-item">
           <input v-model="thirdItem.outsideDiameter" @change="sendProperties($event)"  id="outside-diameter3" type="text" class="input-item">
         </div>
         <div class="input-row">
-          <span class="value-item">Inside Diameter, inch</span>
           <input v-model="firstItem.insideDiameter" @change="sendProperties($event)"  id="inside-diameter1" type="text" class="input-item">
           <input  v-model="secondItem.insideDiameter" @change="sendProperties($event)"  id="inside-diameter2" type="text" class="input-item">
           <input  v-model="thirdItem.insideDiameter" @change="sendProperties($event)"  id="inside-diameter3" type="text" class="input-item" >
         </div>
         <div class="input-row">
-          <span class="value-item">YieldStress</span>
           <input v-model="firstItem.yieldStress" @change="sendProperties($event)"  id="yieldStress1" type="text" class="input-item" >
           <input  v-model="secondItem.yieldStress" @change="sendProperties($event)"  id="yieldStress2" type="text" class="input-item input-item" >
           <input  v-model="thirdItem.yieldStress" @change="sendProperties($event)"  id="yieldStress3" type="text" class="input-item input-item" >
@@ -29,9 +20,6 @@
         <div class="input-row">
           <span class="value-item" style="padding-bottom: 18px;">Axial Scale</span>
           <input v-model="scale" @change="sendProperties($event)"  id="scale123" type="text" class="input-item">
-          <div class="clear">
-            <a href="#" class="clear-link">x clear</a>
-          </div>
         </div>
       </div>
     </form>
@@ -68,7 +56,7 @@ export default {
   },
   mounted () {
     // eslint-disable-next-line no-self-assign
-   this.sendProperties('start')
+   // this.sendProperties('start')
   },
   methods: {
     sendProperties(event) {
@@ -115,7 +103,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "index";
+
 .input-wrapper {
   padding-left: 20px;
   padding-right: 20px;
@@ -139,7 +129,7 @@ export default {
 }
 
 .title-first {
-  color: blue;
+  color: $colorInput;
 }
 
 .title-second {
