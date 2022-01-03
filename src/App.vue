@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <Header @toggle-menu="toggleMenu"/>
+    <Header v-show="!showMenu" @toggle-menu="toggleMenu"/>
     <Menu @toggle-menu="toggleMenu" :class="showMenu ? 'menu--show' : 'menu--hidden'"/>
-    <ChartContainer msg="Welcome to Chart"/>
-    <InputWindow :class="showInputWindow ? 'input-window--show' : 'input-window--hidden'"/>
+    <ChartContainer msg="Welcome to Chart" :inputData="inputData" :singleLoadsData="singleLoadsData" :scale="scale"/>
+    <InputWindow :class="showInputWindow ? 'input-window--show' : 'input-window--hidden'" @input-data="setInputData($event)" @single-loads-data="setSingleLoadsData($event)" @set-scale="setScale($event)"/>
     <SettingWindow :class="showSettings ? 'setting-window--show' : 'setting-window--hidden'"/>
-    <Overlay :class="showOverlay ? 'overlay--show' : 'overlay--hidden'"/>
+    <Overlay :class="showOverlay ? 'overlay--show' : 'overlay--hidden'" @hide-all="hideAll" />
     <Footer @toggle-input="toggleInputWindow" @toggle-settings="toggleSettings"/>
   </div>
 </template>
@@ -29,6 +29,9 @@ export default {
       showMenu: false,
       showInputWindow: false,
       showSettings: false,
+      inputData: [],
+      singleLoadsData: [],
+      scale: '12'
     }
   },
   computed: {
@@ -51,6 +54,23 @@ export default {
       this.showMenu = false
       this.showInputWindow = false
       this.showSettings = !this.showSettings
+    },
+    setInputData(event) {
+      console.log('set Input Data')
+      this.inputData = [...event]
+      this.hideAll()
+    },
+    setSingleLoadsData(event) {
+      console.log('setSingleLoadsData(event)', event)
+      this.singleLoadsData = [...event]
+    },
+    hideAll() {
+      this.showMenu = false
+      this.showSettings = false
+      this.showInputWindow = false
+    },
+    setScale(event) {
+      this.scale = event
     }
   }
 }
@@ -59,17 +79,5 @@ export default {
 
 <style>
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  position: absolute;
-  border: 2px solid grey;
-}
+
 </style>

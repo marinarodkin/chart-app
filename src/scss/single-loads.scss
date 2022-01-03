@@ -1,0 +1,47 @@
+@import "variables";
+@import "src/scss/header.scss";
+@import "src/scss/footer.scss";
+@import "src/scss/input-window.scss";
+
+$colorInput: yellow;
+.single-loads {
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 310px;
+    margin: 0 auto;
+    max-height: 140px;
+    overflow-y: auto;
+  }
+}
+
+.input-row {
+  display: flex;
+  margin-bottom: 5px;
+
+  &__icon-wrapper {
+    width: 20px;
+    text-align: right;
+    height: 20px;
+
+    .material-icons {
+      font-size: 20px;
+      cursor: pointer;
+    }
+  }
+
+  &__wrapper {
+    padding-right: 5px;
+    display: flex;
+    flex-wrap: nowrap;
+  }
+}
+
+.input-item {
+  padding: 5px;
+  margin: 3px;
+  outline: none;
+  border: 1px solid $colorGrey;
+  border-radius: 4px;
+  font-size: 11px;
+}

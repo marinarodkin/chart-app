@@ -1,16 +1,16 @@
 <template>
     <div class="row">
       <div class="chart-wrapper">
-      <Chart :variables="this.variables" :scale="axeRange" :firstChartData ="firstChartData" :secondChartData ="secondChartData" :thirdChartData ="thirdChartData"/>
+      <Chart :variables="this.variables" :scale="axeRange" :chartData ="chartData" />
         <div class="scale-wrapper">
-          <div @click.prevent='setScalePlus' class="scale scale-plus"><a href="#" class="scale-link">
+          <div @click.prevent='setScalePlus' class="scale scale-plus">
             <span class="material-icons">zoom_in
-               </span></a></div>
+               </span>
+          </div>
           <div @click.prevent='setScaleMinus' class="scale scale-minus">
-            <a href="#" class="scale-link">
               <span class="material-icons">zoom_out
                </span>
-            </a></div>
+          </div>
         </div>
       </div>
       </div>
@@ -27,41 +27,85 @@ export default {
     Chart
   },
   props: {
-    msg: String
+    msg: String,
+    inputData: {
+      type: Array,
+      default: () => []
+    },
+    singleLoadsData: {
+      type: Array,
+      default: () => []
+    },
+    scale: {
+      type: String,
+      default: '12'
+    }
   },
   data() {
     return {
       options: {},
       variables: {},
-      firstChartData: [],
-      secondChartData: [],
-      thirdChartData: [],
-      axeRange: 2
+      axeRange: 2,
+      chartData: []
+    }
+  },
+  watch: {
+    inputData: {
+      deep: true,
+      handler() {
+        this.setChartData()
+      }
+    },
+    singleLoadsData: {
+      deep: true,
+      handler() {
+        this.setSingleLoadsData()
+      }
+    },
+    scale: {
+      handler() {
+        this.setChartData()
+      }
     }
   },
   methods: {
-    async setOption(properties) {
-      console.log('set options properties', properties)
-      if (properties.number === 1) {
-        const chartData = await this.getData(properties)
-        this.firstChartData = chartData.data
+    async setChartData() {
+      console.log('setChartData in Chart cont, scale', this.scale)
+      let chartData = []
+      for (let i=0; i < this.inputData.length; i++) {
+        if (this.inputData[i].data) {
+          const {outsideDiameter, insideDiameter, yieldStress} = this.inputData[i].data
+          const scale = this.scale * 1000
+          const calculatedData = await this.getData({outsideDiameter, insideDiameter, yieldStress, scale})
+          chartData.push({id: this.inputData[i].id, data: calculatedData})
+        }
       }
-      if (properties.number === 2) {
-        const chartData = await this.getData(properties)
-        this.secondChartData = chartData.data
-      }
-      if (properties.number === 3) {
-        const chartData = await this.getData(properties)
-        this.thirdChartData = chartData.data
-        console.log('this.thirdChartData', this.thirdChartData)
-      }
+      this.chartData = chartData
+      console.log('this.chartData', this.chartData)
+    },
+    setSingleLoadsData() {
+      const singleLoadsChartData = this.singleLoadsData.filter(item => item.visible).map(item => {
+        return {
+          id: item.id,
+          data: {
+            data: [
+              {
+                x: item.data?.pressure,
+                y: item.data?.force
+              }
+            ]}
+          }
+      })
+      // clear old single-inputs data
+      const chartData = this.chartData.filter(item => !item.id.includes('single-load'))
+      this.chartData = [...chartData, ...singleLoadsChartData]
+
     },
     async getData(properties) {
       const url = 'http://localhost:3001'
       const data = await axios.get(url, {
         params: properties
       })
-      console.log('ddata.length', data.length)
       return data
     },
     setScalePlus() {
@@ -78,32 +122,5 @@ export default {
 }
 </script>
 <style>
-.chart-wrapper {
-  max-width: 1200px;
-  min-width: 90%;
-  max-height: 1800px;
-  border: 2px solid grey;
-  margin: 0 auto;
-  position: relative;
-}
 
-.scale-wrapper {
-  position: absolute;
-  top: 0;
-  right: 2px;
-}
-
-.scale {
-  color: blue;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 0 2px;
-  border: 1px solid blue;
-  border-radius: 3px;
-  width: 15px;
-}
-
-.scale-link {
-  text-decoration: none;
-}
 </style>

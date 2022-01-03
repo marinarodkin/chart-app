@@ -2,7 +2,7 @@
   <div class="menu">
     <div class="menu__header-wrapper">
       <div class="header__icon" @click="$emit('toggle-menu')">
-        <span class="material-icons">menu</span>
+        <span class="material-icons">close</span>
       </div>
       <div class="menu__header"> Oil and gas Calculator</div>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay">
+  <div class="overlay" @click="$emit('hide-all')">
   </div>
 </template>
 

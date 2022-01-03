@@ -2,8 +2,17 @@
 @import "src/scss/header.scss";
 @import "src/scss/footer.scss";
 @import "src/scss/input-window.scss";
+@import "src/scss/inputs.scss";
 @import "src/scss/menu.scss";
 @import "src/scss/setting-window.scss";
 @import "src/scss/overlay.scss";
+@import "src/scss/single-loads.scss";
+@import "src/scss/chart-container.scss";
+@import "src/scss/app.scss";
 
 $colorInput: yellow;
+
+body {
+  margin: 0;
+  padding: 0;
+}

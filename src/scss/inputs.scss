@@ -4,3 +4,64 @@
 @import "src/scss/input-window.scss";
 
 $colorInput: yellow;
+.input-wrapper {
+  &__wrapper {
+    display: flex;
+    justify-content: flex-start;
+    width: $inputWidth;
+    margin: 0 auto;
+
+    &.width1 {
+      width: $inputWidth;
+    }
+
+    &.width2 {
+      width: calc(150px + 150px + 30px)
+    }
+
+    &.width3 {
+      width: calc(150px + 150px + 150px + 30px + 30px)
+    }
+
+    &.width4 {
+      width: calc(150px + 150px + 150px + 150px + 30px + 30px + 30px)
+    }
+
+    &.width5 {
+      width: calc(150px + 150px + 150px + 150px + 150px + 30px + 30px + 30px + 30px)
+    }
+  }
+}
+
+.input-column {
+  display: flex;
+  flex-direction: column;
+  max-width: $inputWidth;
+  margin-left: $inputMargin;
+
+  &__icon-wrapper {
+    width: 100%;
+    text-align: right;
+    height: 20px;
+
+    .material-icons {
+      font-size: 20px;
+      cursor: pointer;
+    }
+  }
+
+  &__wrapper {
+    padding-right: 5px;
+  }
+
+
+}
+
+.input-item {
+  padding: 5px;
+  margin: 3px;
+  outline: none;
+  border: 1px solid $colorGrey;
+  border-radius: 4px;
+  font-size: 11px;
+}
