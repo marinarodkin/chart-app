@@ -1,9 +1,9 @@
 
 <script>
-  import { Scatter } from 'vue-chartjs'
+  import { Line } from 'vue-chartjs'
 
   export default {
-    extends: Scatter,
+    extends: Line,
     props: {
       chartData: [],
       size: {
@@ -18,8 +18,10 @@
         yMin: 0,
         yMax: 0,
         options: {
-          responsive: true,
+          // responsive: true,
+          aspectRatio: 1,
           maintainAspectRatio: false,
+          height: 600,
           legend: {
             display: false
           },
@@ -39,11 +41,11 @@
                 fontSize: 12,
                 count: 10,
                 stepSize: 200000,
+                color: 'red',
                 min: -2000000,
                 max: 2000000,
-                color: 'red',
                 callback: function (val,index) {
-                  return index % 2 === 0 ? val / 10000 : ''
+                  return index % 2 === 0 ? val.toExponential() : ''
                 }
               }
             }],
@@ -51,7 +53,7 @@
               ticks: {
                 stepSize: 2000,
                 callback: function (val,index) {
-                  return index % 2 === 0 ? val / 1000 : ''
+                  return index % 2 === 0 ? val : ''
                 }
               },
               grid: {
@@ -125,7 +127,10 @@
             label: 'Scatter Dataset',
             data: item.data.data,
             backgroundColor: this.getColor(item.id),
-            pointRadius: item.id.includes('single-load') ? '4' : '2'
+            borderColor: this.getColor(item.id),
+            fill: false,
+            lineTension: 1,
+            pointRadius: item.id.includes('single-load') ? '4' : '1'
           }
         })
       },
@@ -140,8 +145,11 @@
         this.resizeCanvas()
       },
       resizeCanvas() {
-        const $wrapper = document.querySelector('chart-wrapper')
-        console.log($wrapper)
+        window.setTimeout(() => {
+          const $canvas = document.querySelector('canvas')
+          console.log('$canvas', $canvas)
+          // $canvas.style.height = '600px'
+        }, 1000)
       },
       getMinMaxForAxes() {
         const allDatasets = [...this.chartData[0].data.data]
@@ -151,10 +159,10 @@
         this.xMin = Math.max.apply(null, allXData)
         this.yMax = Math.max.apply(null, allYData)
         this.yMin = Math.min.apply(null, allYData)
-        this.options.scales.xAxes[0].ticks.min = this.xMin * this.size
-        this.options.scales.xAxes[0].ticks.max = this.xMax * this.size
-        this.options.scales.yAxes[0].ticks.min = this.yMin * this.size
-        this.options.scales.yAxes[0].ticks.max = this.yMax * this.size
+        // this.options.scales.xAxes[0].ticks.min = this.xMin * this.size
+        // this.options.scales.xAxes[0].ticks.max = this.xMax * this.size
+        // this.options.scales.yAxes[0].ticks.min = this.yMin * this.size
+        // this.options.scales.yAxes[0].ticks.max = this.yMax * this.size
       }
     }
 }

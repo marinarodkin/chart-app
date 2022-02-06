@@ -4,7 +4,7 @@
 .input-window {
   @include window();
   width: 100%;
-  height: 310px;
+  height: 360px;
   left: 0;
   border-top: 1px solid $colorGrey;
   border-bottom: 1px solid $colorGrey;
@@ -19,7 +19,7 @@
 
   &__menu {
     display: flex;
-    padding: 20px 30px;
+    padding: 10px 20px;
     justify-content: space-between;
   }
 

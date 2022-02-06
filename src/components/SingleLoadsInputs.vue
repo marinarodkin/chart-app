@@ -7,6 +7,9 @@
       </div>
       </div>
     </form>
+    <div class="single-loads__switch">
+      <SwitchInput :label="'metric'" :label2="'imperial'"/>
+    </div>
   </div>
 </template>
 
@@ -14,11 +17,12 @@
 
 
 import InputRow from "./InputRow";
+import SwitchInput from "./SwitchInput";
 
 export default {
-  name: 'Inputs',
+  name: 'SingleLoadsInput',
   components: {
-    InputRow
+    InputRow, SwitchInput
   },
   props: {
     singleLoadsGroups: [],

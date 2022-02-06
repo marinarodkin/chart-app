@@ -7,9 +7,10 @@ $colorInput: yellow;
 .input-wrapper {
   &__wrapper {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     width: $inputWidth;
     margin: 0 auto;
+    padding-bottom: 30px;
 
     &.width1 {
       width: $inputWidth;
@@ -31,12 +32,22 @@ $colorInput: yellow;
       width: calc(150px + 150px + 150px + 150px + 150px + 30px + 30px + 30px + 30px)
     }
   }
+
+  &__switch {
+    width: 140px;
+    margin-left: 15px;
+
+    .switch__lever {
+      margin-left: 4px;
+    }
+  }
 }
 
 .input-column {
   display: flex;
   flex-direction: column;
   max-width: $inputWidth;
+  width: $inputWidth;
   margin-left: $inputMargin;
 
   &__icon-wrapper {

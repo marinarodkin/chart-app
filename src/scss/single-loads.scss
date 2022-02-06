@@ -7,20 +7,28 @@ $colorInput: yellow;
 .single-loads {
   &__wrapper {
     display: flex;
-    flex-direction: column;
-    width: 310px;
+    width: $inputWidth;
     margin: 0 auto;
-    max-height: 140px;
-    overflow-y: auto;
+  }
+
+  &__switch {
+    width: 140px;
+    margin-left: 15px;
+    margin-top: 66px;
+
+    .switch__lever {
+      margin-left: 4px;
+    }
   }
 }
 
 .input-row {
   display: flex;
   margin-bottom: 5px;
+  flex-direction: column;
 
   &__icon-wrapper {
-    width: 20px;
+    width: 100%;
     text-align: right;
     height: 20px;
 
@@ -33,7 +41,14 @@ $colorInput: yellow;
   &__wrapper {
     padding-right: 5px;
     display: flex;
+    flex-direction: column;
     flex-wrap: nowrap;
+  }
+
+  &__note {
+    padding: 2px;
+    font-size: 12px;
+    align-self: flex-start;
   }
 }
 

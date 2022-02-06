@@ -7,18 +7,21 @@
       </div>
       </div>
     </form>
+    <div class="input-wrapper__switch">
+    <SwitchInput :label="'metric'" :label2="'imperial'"/>
+    </div>
   </div>
 </template>
 
 <script>
 
-
 import InputColumn from "./InputColumn";
+import SwitchInput from "./SwitchInput";
 
 export default {
   name: 'Inputs',
   components: {
-    InputColumn
+    InputColumn, SwitchInput
   },
   props: {
     pipeSpecsGroups: [],
@@ -29,7 +32,16 @@ export default {
   },
   data () {
     return {
-      inputData: {}
+      inputData: {},
+      swiperOption: {
+        slidesPerView: 2,
+        spaceBetween: 15,
+        loop: false,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        }
+      }
     }
   },
   mounted () {

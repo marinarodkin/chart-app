@@ -1,0 +1,27 @@
+@import "variables";
+@import "src/scss/header.scss";
+@import "src/scss/footer.scss";
+@import "src/scss/input-window.scss";
+
+.simple-input {
+ user-select: none;
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 12px);
+  margin-bottom: 3px;
+
+  &__label {
+    cursor: pointer;
+  }
+
+  &__input {
+    width: 16px;
+    font-size: 10px;
+    padding-left: 4px;
+    height: 10px;
+    margin-left: 16px;
+    outline: none;
+    border: 1px solid $colorGrey;
+    border-radius: 1px;
+  }
+}

@@ -68,6 +68,9 @@ export default {
       }
     }
   },
+  mounted() {
+    // draw initial field
+  },
   methods: {
     async setChartData() {
       console.log('setChartData in Chart cont, scale', this.scale)
@@ -83,6 +86,7 @@ export default {
       this.chartData = chartData
       console.log('this.chartData', this.chartData)
     },
+
     setSingleLoadsData() {
       const singleLoadsChartData = this.singleLoadsData.filter(item => item.visible).map(item => {
         return {

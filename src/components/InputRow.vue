@@ -1,11 +1,16 @@
 <template>
   <div class="input-row">
-    <div class="input-row__wrapper">
-      <input v-model="pressure" @change="sendProperties($event)"  placeholder="pressure, (psi)" type="text" class="input-item">
-      <input v-model="force" @change="sendProperties($event)"  placeholder="force, (lbf)" type="text" class="input-item">
-    </div>
     <div class="input-row__icon-wrapper" @click="hideInput()">
       <span class="material-icons">close</span>
+    </div>
+    <div class="input-row__wrapper">
+      <input v-model="name" @change="sendProperties($event)"  placeholder="name, (optional)" type="text" class="input-item">
+      <input v-model="pressure" @change="sendProperties($event)"  placeholder="pressure, (psi)" type="text" class="input-item">
+      <div class="input-row__note">+ internal</div>
+      <div class="input-row__note">+ external</div>
+      <input v-model="force" @change="sendProperties($event)"  placeholder="force, (lbf)" type="text" class="input-item">
+      <div class="input-row__note">+ tension</div>
+      <div class="input-row__note">+ compression</div>
     </div>
   </div>
 </template>
@@ -26,6 +31,7 @@ export default {
   },
   data() {
     return {
+      name: '',
       pressure: '',
       force: ''
     }

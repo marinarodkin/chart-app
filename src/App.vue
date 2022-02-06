@@ -2,7 +2,7 @@
   <div id="app">
     <Header v-show="!showMenu" @toggle-menu="toggleMenu"/>
     <Menu @toggle-menu="toggleMenu" :class="showMenu ? 'menu--show' : 'menu--hidden'"/>
-    <ChartContainer msg="Welcome to Chart" :inputData="inputData" :singleLoadsData="singleLoadsData" :scale="scale"/>
+    <ChartContainer :inputData="inputData" :singleLoadsData="singleLoadsData" :scale="scale"/>
     <InputWindow :class="showInputWindow ? 'input-window--show' : 'input-window--hidden'" @input-data="setInputData($event)" @single-loads-data="setSingleLoadsData($event)" @set-scale="setScale($event)"/>
     <SettingWindow :class="showSettings ? 'setting-window--show' : 'setting-window--hidden'"/>
     <Overlay :class="showOverlay ? 'overlay--show' : 'overlay--hidden'" @hide-all="hideAll" />
@@ -78,6 +78,5 @@ export default {
 </script>
 
 <style>
-
 
 </style>

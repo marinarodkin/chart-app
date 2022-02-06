@@ -1,0 +1,62 @@
+@import "variables";
+@import "src/scss/header.scss";
+@import "src/scss/footer.scss";
+@import "src/scss/input-window.scss";
+
+.color-input {
+ user-select: none;
+  position: relative;
+  width: calc(100% - 12px);
+  margin-bottom: 3px;
+
+
+  &__wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin: 0 auto;
+    justify-content: space-between;
+  }
+
+  &__label {
+    cursor: pointer;
+  }
+
+  &__box {
+    width: 20px;
+    height: 12px;
+    background-color: blue;
+    border: 1px solid grey;
+    margin-left: 16px;
+  }
+
+  &__palette {
+     display: flex;
+     width: 150px;
+     flex-wrap: wrap;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 300;
+    }
+
+  &__color {
+    width: 25px;
+    height: 15px;
+    background-color: pink;
+    border: 1px solid black;
+  }
+
+  &__palette-overlay {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top:-500px;
+    left: 0;
+    opacity: 0;
+    z-index: 200;
+    border: 1px solid pink;
+    overflow: hidden;
+  }
+}

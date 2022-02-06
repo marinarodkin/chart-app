@@ -28,10 +28,6 @@
     </div>
     <Inputs v-if="pipeSpecsVisible" @input-data="setInputData($event)" :pipeSpecsGroups="inputGroups" @hide-input="hideInput($event)" :widthClass ="inputWidthClass"/>
     <SingleLoadsInputs v-if="singleLoadsVisible" :singleLoadsGroups="singleLoadsGroups" @hide-single-load="hideSingleLoad($event)" @single-loads-data="setSingleLoads($event)"/>
-    <div class="input-window__scale-input">
-       <label for="scale">horisontal scale range</label>
-       <input v-model="scale" @change="setScale($event)"  id="scale" placeholder="12" type="text" class="input-item">
-    </div>
   </div>
 </template>
 
