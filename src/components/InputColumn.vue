@@ -5,9 +5,9 @@
     </div>
     <div class="input-column__wrapper">
       <input v-model="name" @change="sendProperties($event)"  placeholder="name, {optional}" type="text" class="input-item">
-      <input v-model="outsideDiameter" @change="sendProperties($event)"  placeholder="outsideDiameter, {in}" type="text" class="input-item">
-      <input v-model="insideDiameter" @change="sendProperties($event)"  placeholder="insideDiameter, {in}" type="text" class="input-item">
-      <input v-model="yieldStress" @change="sendProperties($event)"   placeholder="yield strength, {ksi}" type="text" class="input-item">
+      <input v-model="outsideDiameter" @change="sendProperties($event)"  :placeholder="getPlaceholder('outsideDiameter', 'in')" type="text" class="input-item">
+      <input v-model="insideDiameter" @change="sendProperties($event)"  :placeholder="getPlaceholder('insideDiameter', 'in')" type="text" class="input-item">
+      <input v-model="yieldStress" @change="sendProperties($event)"   :placeholder="getPlaceholder('yield strength', 'ksi')" type="text" class="input-item">
       <input v-model="minThickness" @change="sendProperties($event)"   placeholder="min thickness, {%}" type="text" class="input-item">
       <input v-model="safetyFactor" @change="sendProperties($event)"   placeholder="safety factor" type="text" class="input-item">
       <input v-model="corrAllow" @change="sendProperties($event)"   placeholder="corrAllow" type="text" class="input-item">
@@ -27,6 +27,14 @@ export default {
     number: {
       type: String,
       default: ''
+    },
+    data: {
+      type: Object,
+      default: () => {}
+    },
+    imperialSystem: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -43,6 +51,14 @@ export default {
   computed: {
     isDataComplete () {
       return this.outsideDiameter !== '' && this.insideDiameter !== '' && this.yieldStress !== ''
+    }
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler() {
+        this.clearInputs()
+      }
     }
   },
   methods: {
@@ -73,6 +89,28 @@ export default {
       this.corrAllow = ''
       // this.$emit('props', {})
       this.$emit('hide-input', this.id)
+    },
+    clearInputs () {
+      if (!this.data) {
+        this.outsideDiameter = ''
+        this.insideDiameter = ''
+        this.yieldStress = ''
+        this.minThickness = ''
+        this.safetyFactor =  ''
+        this.corrAllow = ''
+      }
+    },
+    getPlaceholder (placeholder, unit) {
+      let convertedUnit = unit
+      if (!this.imperialSystem) {
+        if (unit === 'in') {
+          convertedUnit = 'mm'
+        }
+        if (unit === 'ksi') {
+          convertedUnit = 'Mpa'
+        }
+      }
+      return `${placeholder}, {${convertedUnit}}`
     }
   }
 }

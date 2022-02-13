@@ -9,6 +9,7 @@
     <div class="menu__main">
       <ul class="menu__list">
         <li v-for="(item, $index) in menuItems"
+            @click="item.active ? $emit('toggle-menu') : null"
             :class="item.divider ? 'menu__list-item menu__list-item--divider' : 'menu__list-item'"
             class="menu__list-item"
             :key="$index">

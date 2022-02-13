@@ -1,14 +1,16 @@
 <template>
   <div class="input-wrapper">
     <form class="input-wrapper__form">
-      <div class="input-wrapper__wrapper" :class="widthClass">
-      <div v-for="(item, $index) in pipeSpecsGroups" :key="item + $index" class="">
-          <InputColumn v-show="item.visible" :id="item.id" @props="setProps($event)" @hide-input="hideInput($event)"/>
-      </div>
+      <div class="input-wrapper__wrapper">
+        <Swiper :options="swiperOptions" :key="swiperOptions.slidesPerView">
+      <SwiperSlide v-for="(item, $index) in pipeSpecsGroups" :key="item + $index" class="">
+          <InputColumn v-show="item.visible" :ref="item.id" :id="item.id" :data="item.data" @props="setProps($event)" @hide-input="hideInput($event)" :imperialSystem="imperialSystem"/>
+      </SwiperSlide>
+        </Swiper>
       </div>
     </form>
     <div class="input-wrapper__switch">
-    <SwitchInput :label="'metric'" :label2="'imperial'"/>
+    <SwitchInput :label="'metric'" :label2="'imperial'" @switch-toggle="switchSystem"/>
     </div>
   </div>
 </template>
@@ -17,11 +19,13 @@
 
 import InputColumn from "./InputColumn";
 import SwitchInput from "./SwitchInput";
+import 'swiper/css/swiper.css'
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 
 export default {
   name: 'Inputs',
   components: {
-    InputColumn, SwitchInput
+    InputColumn, SwitchInput, Swiper, SwiperSlide
   },
   props: {
     pipeSpecsGroups: [],
@@ -33,20 +37,25 @@ export default {
   data () {
     return {
       inputData: {},
-      swiperOption: {
-        slidesPerView: 2,
+      imperialSystem: true,
+      swiperOptions : {
+        slidesPerView: 3,
         spaceBetween: 15,
+        freeMode: true,
+        centeredSlides: false,
         loop: false,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        }
+        visiblePipeSpecsGroups: []
       }
     }
   },
   mounted () {
-    // eslint-disable-next-line no-self-assign
-   // this.sendProperties('start')
+    this.handleSlidesProView()
+  },
+  created() {
+    window.addEventListener("resize", this.handleSlidesProView);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleSlidesProView);
   },
   methods: {
     hideInput (event) {
@@ -56,6 +65,38 @@ export default {
       console.log('setProps in input', inputItem)
       this.$emit('input-data', inputItem)
     },
+    handleSlidesProView () {
+      const appWidth = document.documentElement.clientWidth
+      // const inputRowWidth = 150
+      // const inputMargin = 10
+      let sliderProView = 3
+      if (appWidth < 410) {
+        sliderProView = 2
+      } else if (appWidth > 411 && appWidth < 550 ) {
+        sliderProView = 3
+      } else if (appWidth > 551 && appWidth < 721 ) {
+        sliderProView = 4
+      } else if (appWidth > 721 && appWidth < 890 ) {
+        sliderProView = 5
+      } else if (appWidth > 891 && appWidth < 1000 ) {
+        sliderProView = 6
+      } else if (appWidth > 1001 && appWidth < 1200 ) {
+        sliderProView = 7
+      } else {
+        sliderProView = 8
+      }
+
+      this.swiperOptions.slidesPerView = sliderProView
+    },
+    switchSystem () {
+      this.imperialSystem = !this.imperialSystem
+      this.pipeSpecsGroups.forEach((elem) => {
+        console.log('elem', elem)
+        console.log('this.$refs[elem.id]', this.$refs[elem.id])
+        this.$refs[elem.id][0].clearInputs()
+      })
+      this.$emit('imperial-system', this.imperialSystem)
+    }
     }
 }
 </script>

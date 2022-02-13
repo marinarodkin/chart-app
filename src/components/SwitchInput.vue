@@ -3,7 +3,7 @@
     <label class="switch__label">
       {{label}}
       <input type="checkbox" class="switch__checkbox">
-      <div class="switch__lever"></div>
+      <div class="switch__lever" @click="$emit('switch-toggle')"></div>
       {{label2}}
     </label>
   </div>

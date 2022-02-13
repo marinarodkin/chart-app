@@ -1,7 +1,7 @@
 <template>
     <div class="row">
       <div class="chart-wrapper">
-      <Chart :variables="this.variables" :scale="axeRange" :chartData ="chartData" />
+      <Chart :variables="this.variables" ref="chart" :scale="axeRange" :height="height" :chartData ="chartData" :imperialSystem="imperialSystem"/>
         <div class="scale-wrapper">
           <div @click.prevent='setScalePlus' class="scale scale-plus">
             <span class="material-icons">zoom_in
@@ -39,6 +39,10 @@ export default {
     scale: {
       type: String,
       default: '12'
+    },
+    imperialSystem: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -46,7 +50,8 @@ export default {
       options: {},
       variables: {},
       axeRange: 2,
-      chartData: []
+      chartData: [],
+      height: 550
     }
   },
   watch: {
@@ -69,22 +74,26 @@ export default {
     }
   },
   mounted() {
-    // draw initial field
+    const windowHeight = document.documentElement.clientHeight
+    console.log('windowHeight', windowHeight)
+    this.height = windowHeight -100
   },
   methods: {
     async setChartData() {
-      console.log('setChartData in Chart cont, scale', this.scale)
+      console.log('imperialSystem in Chart cont', this.imperialSystem)
       let chartData = []
       for (let i=0; i < this.inputData.length; i++) {
         if (this.inputData[i].data) {
           const {outsideDiameter, insideDiameter, yieldStress} = this.inputData[i].data
+          const imperialSystem = this.imperialSystem
           const scale = this.scale * 1000
-          const calculatedData = await this.getData({outsideDiameter, insideDiameter, yieldStress, scale})
+          const calculatedData = await this.getData({outsideDiameter, insideDiameter, yieldStress, scale, imperialSystem})
           chartData.push({id: this.inputData[i].id, data: calculatedData})
         }
       }
       this.chartData = chartData
       console.log('this.chartData', this.chartData)
+      console.log('!this.$refs[chart]', this.$refs['chart'])
     },
 
     setSingleLoadsData() {

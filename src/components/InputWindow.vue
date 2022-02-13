@@ -13,6 +13,11 @@
           </span>
         to pipe specs
       </div>
+      <div class="input-window__item" @click="$emit('hide-all')">
+          <span class="material-icons">
+          arrow_drop_down
+          </span>
+      </div>
       <div class="input-window__item" @click="addSingleLoad()" v-show="!pipeSpecsVisible">
           <span class="material-icons">
           add
@@ -26,7 +31,7 @@
         to single loads
       </div>
     </div>
-    <Inputs v-if="pipeSpecsVisible" @input-data="setInputData($event)" :pipeSpecsGroups="inputGroups" @hide-input="hideInput($event)" :widthClass ="inputWidthClass"/>
+    <Inputs v-if="pipeSpecsVisible" @input-data="setInputData($event)" :pipeSpecsGroups="inputGroups" @hide-input="hideInput($event)" @imperial-system="handleSwitchImperialSystem" :widthClass ="inputWidthClass" :imperialSystem="true"/>
     <SingleLoadsInputs v-if="singleLoadsVisible" :singleLoadsGroups="singleLoadsGroups" @hide-single-load="hideSingleLoad($event)" @single-loads-data="setSingleLoads($event)"/>
   </div>
 </template>
@@ -47,6 +52,7 @@ export default {
       currentInput: 0,
       singleLoadsVisible: false,
       scale: 12,
+      imperialSystem: true,
       inputGroups: [
         {
           id: 'input-group0',
@@ -66,6 +72,26 @@ export default {
         },
         {
           id: 'input-group4',
+          visible: false
+        },
+        {
+          id: 'input-group5',
+          visible: false
+        },
+        {
+          id: 'input-group6',
+          visible: false
+        },
+        {
+          id: 'input-group7',
+          visible: false
+        },
+        {
+          id: 'input-group8',
+          visible: false
+        },
+        {
+          id: 'input-group9',
           visible: false
         }
       ],
@@ -98,7 +124,7 @@ export default {
       return 'width' + this.inputGroups.filter(item => item.visible === true).length
     },
     pipeSpecsDisable () {
-      return this.inputGroups.filter(item => item.visible === true).length >= 5 && this.pipeSpecsVisible
+      return this.inputGroups.filter(item => item.visible === true).length >= 10 && this.pipeSpecsVisible
     }
   },
   methods: {
@@ -141,6 +167,8 @@ export default {
       const inputToHide = this.inputGroups.find(item => item.id === event)
       inputToHide.visible = false
       delete inputToHide.data
+      this.inputGroups.sort((a, b) => b.visible - a.visible)
+      console.log(this.inputGroups)
       this.$emit('input-data', this.inputGroups)
     },
     hideSingleLoad(event) {
@@ -153,6 +181,8 @@ export default {
     setInputData(event) {
       const currentInputData = this.inputGroups.find(data => data.id === event.id)
       currentInputData.data = event.data
+      //this.$set(this.selectedProducts, 0, { ...this.selectedProducts[0], orderUnitOptions: this.orderUnitOptionsDefault })
+
       this.$emit('input-data', this.inputGroups)
     },
     setSingleLoads(event) {
@@ -160,9 +190,26 @@ export default {
       currentInputData.data = event.data
       this.$emit('single-loads-data', this.singleLoadsGroups)
     },
-    setScale() {
-      console.log('set-scale', this.scale)
-      this.$emit('set-scale', this.scale)
+    clearAll() {
+      // remove data from items
+      this.inputGroups = this.inputGroups.map((item) => {
+        return {
+          id: item.id,
+          visible: item.visible
+        }
+      })
+      this.singleLoadsGroups = this.singleLoadsGroups.map((item) => {
+        return {
+          id: item.id,
+          visible: item.visible
+        }
+      })
+      this.$emit('input-data', this.inputGroups)
+      this.$emit('single-loads-data', this.singleLoadsGroups)
+    },
+    handleSwitchImperialSystem(event) {
+      this.$emit('imperial-system', event)
+      this.clearAll()
     }
   }
 }

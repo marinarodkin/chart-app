@@ -5,10 +5,10 @@
     </div>
     <div class="input-row__wrapper">
       <input v-model="name" @change="sendProperties($event)"  placeholder="name, (optional)" type="text" class="input-item">
-      <input v-model="pressure" @change="sendProperties($event)"  placeholder="pressure, (psi)" type="text" class="input-item">
+      <input v-model="pressure" @change="sendProperties($event)" :placeholder="getPlaceholder('pressure', 'psi')" type="text" class="input-item">
       <div class="input-row__note">+ internal</div>
       <div class="input-row__note">+ external</div>
-      <input v-model="force" @change="sendProperties($event)"  placeholder="force, (lbf)" type="text" class="input-item">
+      <input v-model="force" @change="sendProperties($event)"  :placeholder="getPlaceholder(placeholder='force', 'lbf')" type="text" class="input-item">
       <div class="input-row__note">+ tension</div>
       <div class="input-row__note">+ compression</div>
     </div>
@@ -27,6 +27,10 @@ export default {
     number: {
       type: String,
       default: ''
+    },
+    imperialSystem: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -60,6 +64,18 @@ export default {
       this.pressure = ''
       this.force = ''
       this.$emit('hide-input', this.id)
+    },
+    getPlaceholder (placeholder, unit) {
+      let convertedUnit = unit
+      if (!this.imperialSystem) {
+        if (unit === 'lbf') {
+          convertedUnit = 'kN'
+        }
+        if (unit === 'psi') {
+          convertedUnit = 'Mpa'
+        }
+      }
+      return `${placeholder}, {${convertedUnit}}`
     }
   }
 }

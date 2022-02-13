@@ -7,8 +7,9 @@ $colorInput: yellow;
 .single-loads {
   &__wrapper {
     display: flex;
-    width: $inputWidth;
     margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   &__switch {
@@ -26,6 +27,8 @@ $colorInput: yellow;
   display: flex;
   margin-bottom: 5px;
   flex-direction: column;
+  width: $inputWidth;
+  min-width: $inputWidth;
 
   &__icon-wrapper {
     width: 100%;

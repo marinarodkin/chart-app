@@ -1,6 +1,7 @@
 
 <script>
   import { Line } from 'vue-chartjs'
+  // import { Scatter } from 'vue-chartjs'
 
   export default {
     extends: Line,
@@ -9,6 +10,10 @@
       size: {
         type: Number,
         default: 1.3,
+      },
+      imperialSystem: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -17,9 +22,9 @@
         xMax: 0,
         yMin: 0,
         yMax: 0,
+        allChartData: [],
         options: {
-          // responsive: true,
-          aspectRatio: 1,
+          responsive: true,
           maintainAspectRatio: false,
           height: 600,
           legend: {
@@ -30,8 +35,8 @@
               type: 'linear',
               position: 'bottom',
               display: true,
-              min: -2000000,
-              max: 2000000,
+              min: -900000,
+              max: 900000,
               gridLines: {
                 display: true
               },
@@ -40,12 +45,16 @@
                 autoSkip: false,
                 fontSize: 12,
                 count: 10,
-                stepSize: 200000,
+                stepSize: this.imperialSystem ? 200000 : 100000000,
                 color: 'red',
-                min: -2000000,
-                max: 2000000,
+                min: -1000000,
+                max: 1000000,
                 callback: function (val,index) {
-                  return index % 2 === 0 ? val.toExponential() : ''
+                  if (this.imperialSystem) {
+                    return index % 2 === 0 ? val.toExponential() : ''
+                  } else {
+                    return index % 2 === 0 ? val.toExponential() : ''
+                  }
                 }
               }
             }],
@@ -63,17 +72,27 @@
             }]
           },
           tooltips: {
+            mode: 'nearest',
+            displayColors: false,
             callbacks: {
-              displayColors: false,
-              label: function (tooltipItem) {
-                const x = parseInt(tooltipItem.xLabel)
+              title: function () {
+                return ''
+              },
+              label: function (tooltipItem, data) {
+                const imperialSystemInChart = data.datasets[0].imperialSystem
+                const x = parseInt(tooltipItem.xLabel).toExponential()
                 const y = parseInt(tooltipItem.yLabel)
+                const xUnit = imperialSystemInChart ? ' {ksi}' : ' {kN}'
+                const yUnit = imperialSystemInChart ? ' {lbf}' : ' {Mpa}'
                 return [
-                  x > 0 ? 'Compression' + ': ' + x : 'Tension' + ': ' + x,
-                  y > 0 ? 'External pressure' + ': ' + y : 'Internal Pressure' + ': ' + y
+                  x >= 0 ? 'Compression' + ': ' + x + xUnit : 'Tension' + ': ' + x + xUnit,
+                  y >= 0 ? 'External pressure' + ': ' + y + yUnit: 'Internal Pressure' + ': ' + y + yUnit
                 ]
               }
             }
+          },
+          hover: {
+            mode: 'nearest'
           }
         }
       }
@@ -111,18 +130,22 @@
     methods: {
       getColor(id) {
         const number = id.substr(id.length-1, 1)
-        console.log(number)
         const colors = {
           0: 'rgb(0, 0, 229)',
           1: 'rgb(230, 147, 39)',
           2: 'rgb(24, 222, 97)',
-          3: 'rgb(230, 147, 39)',
-          4: 'rgb(136, 46, 191)'
+          3: 'rgb(230, 187, 139)',
+          4: 'rgb(136, 46, 191)',
+          5: 'rgb(50, 100, 229)',
+          6: 'rgb(190, 147, 59)',
+          7: 'rgb(24, 282, 197)',
+          8: 'rgb(330, 347, 39)',
+          9: 'rgb(0, 0, 0)'
         }
         return colors[number]
       },
       buildDataset() {
-        return this.chartData.map(item => {
+        const dataset =  this.chartData.map(item => {
           return {
             label: 'Scatter Dataset',
             data: item.data.data,
@@ -130,15 +153,16 @@
             borderColor: this.getColor(item.id),
             fill: false,
             lineTension: 1,
-            pointRadius: item.id.includes('single-load') ? '4' : '1'
+            pointRadius: item.id.includes('single-load') ? '4' : '1',
+            imperialSystem: this.imperialSystem
           }
         })
+        this.allChartData = dataset.flatMap(set => set.data)
+        return dataset
       },
       renderAllCharts() {
-        console.log('render chart', this.chartData)
-        this.getMinMaxForAxes()
         let dataset = this.buildDataset()
-        // console.log('dataset', dataset)
+        this.getMinMaxForAxes()
         this.renderChart({
           datasets: dataset
         }, this.options)
@@ -152,17 +176,17 @@
         }, 1000)
       },
       getMinMaxForAxes() {
-        const allDatasets = [...this.chartData[0].data.data]
-        const allXData = allDatasets.filter(item => item.y).map(item => item.x * 1)
-        const allYData = allDatasets.map(item => item.y * 1).filter(item => !isNaN(item))
-        this.xMax = Math.min.apply(null, allXData)
-        this.xMin = Math.max.apply(null, allXData)
+        const allXData = this.allChartData.map(item => item.x)
+        const allYData = this.allChartData.map(item => item.y)
+        this.xMin = Math.min.apply(null, allXData)
+        this.xMax = Math.max.apply(null, allXData)
         this.yMax = Math.max.apply(null, allYData)
         this.yMin = Math.min.apply(null, allYData)
-        // this.options.scales.xAxes[0].ticks.min = this.xMin * this.size
-        // this.options.scales.xAxes[0].ticks.max = this.xMax * this.size
-        // this.options.scales.yAxes[0].ticks.min = this.yMin * this.size
-        // this.options.scales.yAxes[0].ticks.max = this.yMax * this.size
+        this.options.scales.xAxes[0].ticks.min = Math.ceil(this.xMin * 1.3 / 100000) * 100000
+        this.options.scales.xAxes[0].ticks.max = Math.ceil(this.xMax * 1.3 / 100000) * 100000
+        this.options.scales.yAxes[0].ticks.min = Math.ceil(this.yMin * 1.3 / 1000) * 1000
+        this.options.scales.yAxes[0].ticks.max = Math.ceil(this.yMax * 1.3 / 1000) * 1000
+        this.options.scales.xAxes[0].ticks.stepSize = this.imperialSystem ? 200000 : 6000000
       }
     }
 }

@@ -8,9 +8,12 @@ $colorInput: yellow;
   &__wrapper {
     display: flex;
     justify-content: center;
-    width: $inputWidth;
+    width: 100%;
     margin: 0 auto;
     padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    min-height: 234px;
 
     &.width1 {
       width: $inputWidth;
@@ -48,7 +51,6 @@ $colorInput: yellow;
   flex-direction: column;
   max-width: $inputWidth;
   width: $inputWidth;
-  margin-left: $inputMargin;
 
   &__icon-wrapper {
     width: 100%;
@@ -75,4 +77,17 @@ $colorInput: yellow;
   border: 1px solid $colorGrey;
   border-radius: 4px;
   font-size: 11px;
+}
+
+.swiper-test {
+  width: 100px;
+  height: 50px;
+
+  &--red {
+    background-color: red;
+  }
+
+  &--green {
+    background-color: green;
+  }
 }

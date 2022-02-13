@@ -14,6 +14,10 @@
     .material-icons {
       font-size: $largeIconsSize;
       cursor: pointer;
+
+      &--disabled {
+        color: lightslategray;
+      }
     }
   }
 }

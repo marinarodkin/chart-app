@@ -2,8 +2,8 @@
   <div id="app">
     <Header v-show="!showMenu" @toggle-menu="toggleMenu"/>
     <Menu @toggle-menu="toggleMenu" :class="showMenu ? 'menu--show' : 'menu--hidden'"/>
-    <ChartContainer :inputData="inputData" :singleLoadsData="singleLoadsData" :scale="scale"/>
-    <InputWindow :class="showInputWindow ? 'input-window--show' : 'input-window--hidden'" @input-data="setInputData($event)" @single-loads-data="setSingleLoadsData($event)" @set-scale="setScale($event)"/>
+    <ChartContainer :inputData="inputData" :singleLoadsData="singleLoadsData" :scale="scale" :imperialSystem="imperialSystem"/>
+    <InputWindow :class="showInputWindow ? 'input-window--show' : 'input-window--hidden'" @input-data="setInputData($event)" @single-loads-data="setSingleLoadsData($event)" @hide-all="hideAll" @imperial-system="imperialSystem = $event"/>
     <SettingWindow :class="showSettings ? 'setting-window--show' : 'setting-window--hidden'"/>
     <Overlay :class="showOverlay ? 'overlay--show' : 'overlay--hidden'" @hide-all="hideAll" />
     <Footer @toggle-input="toggleInputWindow" @toggle-settings="toggleSettings"/>
@@ -31,7 +31,8 @@ export default {
       showSettings: false,
       inputData: [],
       singleLoadsData: [],
-      scale: '12'
+      scale: '12',
+      imperialSystem: true
     }
   },
   computed: {
@@ -58,7 +59,7 @@ export default {
     setInputData(event) {
       console.log('set Input Data')
       this.inputData = [...event]
-      this.hideAll()
+      // this.hideAll()
     },
     setSingleLoadsData(event) {
       console.log('setSingleLoadsData(event)', event)
