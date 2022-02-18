@@ -25,6 +25,7 @@
       <SwitchInput :label="'show markers'" class="customize-envelope__padding-left"/>
       <SwitchInput :label="'marker colors'" class="customize-envelope__padding-left"/>
     </div>
+    <div class="customize-envelope__overlay"></div>
   </div>
 </template>
 

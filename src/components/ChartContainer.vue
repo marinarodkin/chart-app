@@ -115,7 +115,8 @@ export default {
 
     },
     async getData(properties) {
-      const url = 'http://localhost:3001'
+      // const url = 'http://localhost:3001'
+      const url = 'https://dry-forest-73581.herokuapp.com/'
       const data = await axios.get(url, {
         params: properties
       })

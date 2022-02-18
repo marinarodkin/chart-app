@@ -4,13 +4,20 @@
 @import "src/scss/input-window.scss";
 
 .customize-envelope {
- width: 250px;
+  width: auto;
   margin: 0 auto;
   text-align: center;
+  max-width: 500px;
+  padding-left: 40px;
+  padding-right: 40px;
+  position: relative;
+  font-size: 12px;
+  color: $colorGrey;
 
   &__title {
     margin-bottom: 8px;
     align-self: center;
+    font-size: 14px;
   }
 
   &__wrapper {
@@ -20,16 +27,75 @@
     padding-top: 12px;
     padding-bottom: 12px;
     margin-top: 12px;
-    margin-bottom: 20px;
     border-top: 1px solid grey;
     border-bottom: 1px solid grey;
     overflow: scroll;
-    font-size: 12px;
-    color: $colorGrey;
     max-height: 50%;
+    margin-bottom: 10px;
   }
 
   &__padding-left {
     margin-left: 12px;
   }
+
+  .select {
+    width: 170px;
+    margin: 0 auto;
+  }
+
+  &__overlay {
+    position: absolute;
+    width: 90%;
+    height: 100%;
+    background-color: #fff;
+    opacity: .6;
+    z-index: 100;
+    top: 0;
+  }
+
+  &__connections {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 20px;
+    border-bottom: 1px solid $colorGrey;
+    margin-bottom: 10px;
+  }
+
+  &__connections-left {
+    width: 50%;
+    padding-left: 30px;
+    position: relative;
+  }
+
+  &__connections-right {
+    padding-top: 20px;
+    width: 50%;
+  }
+
+  &__connections-selector {
+    font-size: 12px;
+    border: 1px solid $colorGrey;
+    border-radius: 3px;
+    padding: 3px;
+    width: 100px;
+
+    &--first {
+      margin-bottom: 15px;
+    }
+  }
+
+    &__line {
+      position: absolute;
+      width: 1px;
+      height: 16px;
+      top: 24px;
+      left: 80px;
+      background-color: $colorGrey;
+    }
+
+    &__select-load {
+      .material-icons {
+        font-size: 14px;
+      }
+    }
 }
