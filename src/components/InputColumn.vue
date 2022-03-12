@@ -10,7 +10,7 @@
       <input v-model="yieldStress" @change="sendProperties($event)"   :placeholder="getPlaceholder('yield strength', 'ksi')" type="text" class="input-item">
       <input v-model="minThickness" @change="sendProperties($event)"   placeholder="min thickness, {%}" type="text" class="input-item">
       <input v-model="safetyFactor" @change="sendProperties($event)"   placeholder="safety factor" type="text" class="input-item">
-      <input v-model="corrAllow" @change="sendProperties($event)"   placeholder="corrAllow" type="text" class="input-item">
+      <input v-model="corrAllow" @change="sendProperties($event)"   placeholder="corrosion allowance" type="text" class="input-item">
     </div>
   </div>
 </template>
@@ -60,6 +60,14 @@ export default {
         this.clearInputs()
       }
     }
+  },
+  mounted() {
+    this.outsideDiameter = this.data && this.data.outsideDiameter ? this.data.outsideDiameter : ""
+    this.insideDiameter = this.data && this.data.insideDiameter ? this.data.insideDiameter : ""
+    this.yieldStress = this.data && this.data.yieldStress ? this.data.yieldStress : ""
+    this.minThickness = this.data && this.data.minThickness ? this.data.minThickness : ""
+    this.safetyFactor = this.data && this.data.safetyFactor ? this.data.safetyFactor : ""
+    this.corrAllow = this.data && this.data.corrAllow ? this.data.corrAllow : ""
   },
   methods: {
     sendProperties() {

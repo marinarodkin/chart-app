@@ -31,8 +31,8 @@
         to single loads
       </div>
     </div>
-    <Inputs v-if="pipeSpecsVisible" @input-data="setInputData($event)" :pipeSpecsGroups="inputGroups" @hide-input="hideInput($event)" @imperial-system="handleSwitchImperialSystem" :widthClass ="inputWidthClass" :imperialSystem="true"/>
-    <SingleLoadsInputs v-if="singleLoadsVisible" :singleLoadsGroups="singleLoadsGroups" @hide-single-load="hideSingleLoad($event)" @single-loads-data="setSingleLoads($event)"/>
+    <Inputs v-if="pipeSpecsVisible" :current-input="currentInput" @input-data="setInputData($event)" :pipeSpecsGroups="inputGroups" @hide-input="hideInput($event)" @imperial-system="handleSwitchImperialSystem" :widthClass ="inputWidthClass" :imperialSystem="imperialSystem"/>
+    <SingleLoadsInputs v-if="singleLoadsVisible" :current-input="currentSingleInput" :singleLoadsGroups="singleLoadsGroups" @hide-single-load="hideSingleLoad($event)" @single-loads-data="setSingleLoads($event)" @imperial-system="handleSwitchImperialSystem" :imperialSystem="imperialSystem"/>
   </div>
 </template>
 
@@ -49,7 +49,8 @@ export default {
   data() {
     return {
       pipeSpecsVisible: false,
-      currentInput: 0,
+      currentInput: {},
+      currentSingleInput: {},
       singleLoadsVisible: false,
       scale: 12,
       imperialSystem: true,
@@ -150,9 +151,9 @@ export default {
       if (!this.singleLoadsVisible) {
         this.singleLoadsVisible = true
       } else  {
-        this.currentInput = this.singleLoadsGroups.find(item => item.visible === false)
-        if (this.currentInput) {
-          this.currentInput.visible = true
+        this.currentSingleInput = this.singleLoadsGroups.find(item => item.visible === false)
+        if (this.currentSingleInput) {
+          this.currentSingleInput.visible = true
         }
       }
       if (this.pipeSpecsVisible) {
@@ -208,7 +209,8 @@ export default {
       this.$emit('single-loads-data', this.singleLoadsGroups)
     },
     handleSwitchImperialSystem(event) {
-      this.$emit('imperial-system', event)
+      this.imperialSystem = event
+      this.$emit('imperial-system', this.imperialSystem)
       this.clearAll()
     }
   }

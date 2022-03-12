@@ -4,11 +4,10 @@
 .footer {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
   position: absolute;
   left: 0;
   bottom: 0;
-  padding: 10px 6px 10px 6px;
+  padding: 10px 6px 20px 6px;
   z-index: 10;
   width: 100%;
   background-color: #fff;
@@ -16,11 +15,11 @@
 
   &__icon {
     width: 80px;
-    height: 70px;
+    height: $iconsHeight;
    @include icon();
 
     .material-icons {
-      font-size: 58px;
+      font-size: $largeIconsSize;
 
       &--disabled {
         color: lightslategray;

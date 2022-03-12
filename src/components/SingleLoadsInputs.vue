@@ -2,9 +2,9 @@
   <div class="single-loads">
     <form class="single-loads__form">
       <div class="single-loads__wrapper">
-        <Swiper :options="swiperOptions" :key="swiperOptions.slidesPerView">
+        <Swiper :options="swiperOptions" :key="swiperOptions.slidesPerView" ref="singleLoadSwiper">
       <SwiperSlide v-for="(item, $index) in singleLoadsGroups" :key="item + $index" class="">
-          <InputRow v-show="item.visible" :id="item.id" @props="setProps($event)" @hide-input="hideInput($event)" :imperialSystem="imperialSystem"/>
+          <InputRow v-show="item.visible" :id="item.id" @props="setProps($event)" :data="item.data" @hide-input="hideInput($event)" :imperialSystem="imperialSystem"/>
       </SwiperSlide>
         </Swiper>
       </div>
@@ -33,15 +33,23 @@ export default {
     widthClass: {
       type: String,
       default: 'width1'
+    },
+    currentInput: {
+      type: Object,
+      default: () => {}
+    },
+    imperialSystem: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
       inputData: {},
-      imperialSystem: true,
       swiperOptions : {
         slidesPerView: 3,
-        spaceBetween: 1,
+        spaceBetween: 15,
+        centeredSlides: true,
         freeMode: true,
         loop: false
       }
@@ -49,6 +57,25 @@ export default {
   },
   mounted () {
     this.handleSlidesProView()
+    window.setTimeout(() => {
+      if (this.$refs.singleLoadSwiper.$swiper && this.currentInput.id) {
+        const currentSlideIndex = this.currentInput.id.substr(this.currentInput.id.length -1, 1)
+        this.$refs.singleLoadSwiper.$swiper.slideTo(currentSlideIndex)
+      }
+    },100)
+  },
+  watch: {
+    currentInput: {
+      deep: true,
+      handler() {
+        console.log('this.currentInput', this.currentInput)
+        if (this.$refs.singleLoadSwiper.$swiper && this.currentInput.id) {
+          const currentSlideIndex = this.currentInput.id.substr(this.currentInput.id.length -1, 1)
+          console.log('currentSlideIndex', currentSlideIndex)
+          this.$refs.singleLoadSwiper.$swiper.slideTo(currentSlideIndex)
+        }
+      }
+    },
   },
   created() {
     window.addEventListener("resize", this.handleSlidesProView);

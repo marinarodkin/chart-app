@@ -7,10 +7,10 @@
       <input v-model="name" @change="sendProperties($event)"  placeholder="name, (optional)" type="text" class="input-item">
       <input v-model="pressure" @change="sendProperties($event)" :placeholder="getPlaceholder('pressure', 'psi')" type="text" class="input-item">
       <div class="input-row__note">+ internal</div>
-      <div class="input-row__note">+ external</div>
+      <div class="input-row__note">- external</div>
       <input v-model="force" @change="sendProperties($event)"  :placeholder="getPlaceholder(placeholder='force', 'lbf')" type="text" class="input-item">
       <div class="input-row__note">+ tension</div>
-      <div class="input-row__note">+ compression</div>
+      <div class="input-row__note">- compression</div>
     </div>
   </div>
 </template>
@@ -28,6 +28,10 @@ export default {
       type: String,
       default: ''
     },
+    data: {
+      type: Object,
+      default: () => {}
+    },
     imperialSystem: {
       type: Boolean,
       default: true
@@ -39,6 +43,10 @@ export default {
       pressure: '',
       force: ''
     }
+  },
+  mounted() {
+    this.pressure = this.data && this.data.pressure ? this.data.pressure : ""
+    this.force = this.data && this.data.force ? this.data.force : ""
   },
   computed: {
     isDataComplete () {

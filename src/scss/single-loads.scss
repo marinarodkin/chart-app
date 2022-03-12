@@ -5,6 +5,7 @@
 
 $colorInput: yellow;
 .single-loads {
+  position: relative;
   &__wrapper {
     display: flex;
     margin: 0 auto;
@@ -13,9 +14,10 @@ $colorInput: yellow;
   }
 
   &__switch {
+    position: absolute;
     width: 140px;
-    margin-left: 15px;
-    margin-top: 66px;
+    left: 15px;
+    bottom: -72px;
 
     .switch__lever {
       margin-left: 4px;

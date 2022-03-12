@@ -2,7 +2,7 @@
   <div class="input-wrapper">
     <form class="input-wrapper__form">
       <div class="input-wrapper__wrapper">
-        <Swiper :options="swiperOptions" :key="swiperOptions.slidesPerView">
+        <Swiper :options="swiperOptions" :key="swiperOptions.slidesPerView" ref="inputsSwiper">
       <SwiperSlide v-for="(item, $index) in pipeSpecsGroups" :key="item + $index" class="">
           <InputColumn v-show="item.visible" :ref="item.id" :id="item.id" :data="item.data" @props="setProps($event)" @hide-input="hideInput($event)" :imperialSystem="imperialSystem"/>
       </SwiperSlide>
@@ -10,7 +10,7 @@
       </div>
     </form>
     <div class="input-wrapper__switch">
-    <SwitchInput :label="'metric'" :label2="'imperial'" @switch-toggle="switchSystem"/>
+      <SwitchInput :label="'metric'" :label2="'imperial'" @switch-toggle="switchSystem"/>
     </div>
   </div>
 </template>
@@ -32,21 +32,36 @@ export default {
     widthClass: {
       type: String,
       default: 'width1'
+    },
+    imperialSystem: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
       inputData: {},
-      imperialSystem: true,
       swiperOptions : {
         slidesPerView: 3,
         spaceBetween: 15,
         freeMode: true,
-        centeredSlides: false,
+        centeredSlides: true,
         loop: false,
         visiblePipeSpecsGroups: []
       }
     }
+  },
+  watch: {
+    currentInput: {
+      deep: true,
+      handler() {
+        if (this.$refs.inputsSwiper.$swiper && this.currentInput.id) {
+          const currentSlideIndex = this.currentInput.id.substr(this.currentInput.id.length -1, 1)
+          console.log('currentSlideIndex', currentSlideIndex)
+          this.$refs.inputsSwiper.$swiper.slideTo(currentSlideIndex)
+        }
+      }
+    },
   },
   mounted () {
     this.handleSlidesProView()
@@ -87,6 +102,12 @@ export default {
       }
 
       this.swiperOptions.slidesPerView = sliderProView
+      window.setTimeout(() => {
+        if (this.$refs.inputsSwiper.$swiper && this.currentInput.id) {
+          const currentSlideIndex = this.currentInput.id.substr(this.currentInput.id.length -1, 1)
+          this.$refs.inputsSwiper.$swiper.slideTo(currentSlideIndex)
+        }
+      },100)
     },
     switchSystem () {
       this.imperialSystem = !this.imperialSystem

@@ -30,7 +30,6 @@
       <SimpleInput label="width, (px)" class="customize-envelope__padding-left"/>
       <LineTypeInput label="dashes" class="customize-envelope__padding-left"/>
     </div>
-    <div class="customize-envelope__overlay"></div>
   </div>
 </template>
 

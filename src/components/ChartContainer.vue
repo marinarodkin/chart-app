@@ -1,17 +1,7 @@
 <template>
     <div class="row">
       <div class="chart-wrapper">
-      <Chart :variables="this.variables" ref="chart" :scale="axeRange" :height="height" :chartData ="chartData" :imperialSystem="imperialSystem"/>
-        <div class="scale-wrapper">
-          <div @click.prevent='setScalePlus' class="scale scale-plus">
-            <span class="material-icons">zoom_in
-               </span>
-          </div>
-          <div @click.prevent='setScaleMinus' class="scale scale-minus">
-              <span class="material-icons">zoom_out
-               </span>
-          </div>
-        </div>
+        <Chart :variables="this.variables" ref="chart" :scale="axeRange" :height="height" :chartData ="chartData" :imperialSystem="imperialSystem"/>
       </div>
       </div>
 </template>
