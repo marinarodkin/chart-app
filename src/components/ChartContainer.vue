@@ -81,11 +81,42 @@ export default {
           chartData.push({id: this.inputData[i].id, data: calculatedData})
         }
       }
-      this.chartData = chartData
+      this.chartData = this.buildDataset(chartData)
       console.log('this.chartData', this.chartData)
-      console.log('!this.$refs[chart]', this.$refs['chart'])
     },
-
+    buildDataset(chartData) {
+      const dataset = chartData.map(item => {
+        return {
+          label: 'Dataset',
+          data: item.data.data,
+          backgroundColor: this.getColor(item.id),
+          borderColor: this.getColor(item.id),
+          fill: false,
+          lineTension: 1,
+          pointRadius: item.id.includes('single-load') ? '4' : '1',
+          imperialSystem: this.imperialSystem,
+          showLine:true
+        }
+      })
+      this.allChartData = dataset.flatMap(set => set.data)
+      return dataset
+    },
+    getColor(id) {
+      const number = id.substr(id.length-1, 1)
+      const colors = {
+        0: 'rgb(0, 0, 229)',
+        1: 'rgb(230, 147, 39)',
+        2: 'rgb(24, 222, 97)',
+        3: 'rgb(230, 187, 139)',
+        4: 'rgb(136, 46, 191)',
+        5: 'rgb(50, 100, 229)',
+        6: 'rgb(190, 147, 59)',
+        7: 'rgb(24, 282, 197)',
+        8: 'rgb(330, 347, 39)',
+        9: 'rgb(0, 0, 0)'
+      }
+      return colors[number]
+    },
     setSingleLoadsData() {
       const singleLoadsChartData = this.singleLoadsData.filter(item => item.visible).map(item => {
         return {
@@ -105,8 +136,8 @@ export default {
 
     },
     async getData(properties) {
-      // const url = 'http://localhost:3001'
-      const url = 'https://dry-forest-73581.herokuapp.com/'
+      const url = 'http://localhost:3001'
+      // const url = 'https://dry-forest-73581.herokuapp.com/'
       const data = await axios.get(url, {
         params: properties
       })
