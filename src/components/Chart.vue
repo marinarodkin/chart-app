@@ -1,13 +1,14 @@
 <template>
 <div id="chart">
-  <ScatterChart v-bind="scatterChartProps" />
-  <img style="width: 500px" v-if="imgData" :src="imgData" />
+  <ScatterChart ref="scatterRef" v-bind="scatterChartProps" :options="options" @chart:render="handleChartRender"  :height="height"/>
 </div>
 </template>
 
 <script>
 import { ScatterChart, useScatterChart } from "vue-chart-3";
-import { ref, computed, defineComponent } from "@vue/composition-api";
+import { ref, computed, defineComponent, onMounted } from "@vue/composition-api";
+import { Chart, Tooltip } from 'chart.js';
+Chart.register(Tooltip);
 // import { shuffle } from "lodash-es";
 
 export default defineComponent({
@@ -37,25 +38,31 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const imgData = ref(null);
+    const chartRef = ref();
 
-    const options = computed(() => ({
+    onMounted(() => {
+      console.log('this', this)
+      // getMinMaxForAxes()
+    });
+
+    const options = ref({
       responsive: true,
       maintainAspectRatio: false,
-      height: 800,
-      onChartRender: (chart) => console.log('onChartRender, chat', chart),
-      legend: {
-        display: false
+      interaction: {
+        mode: 'index'
       },
       scales: {
-        xAxes: [{
+        x: {
           type: 'linear',
-          position: 'bottom',
+          position: 'center',
           display: true,
-          min: -900000,
-          max: 900000,
+          color: '#000000',
           gridLines: {
             display: true
+          },
+          title: {
+            display: false,
+            text: "Tension/Compression",
           },
           ticks: {
             beginAtZero: false,
@@ -63,49 +70,48 @@ export default defineComponent({
             fontSize: 12,
             count: 10,
             stepSize: props.imperialSystem ? 200000 : 100000000,
-            color: 'red',
-            min: -1000000,
-            max: 1000000,
-            callback: function (val,index) {
+            callback: function (val, index) {
               if (props.imperialSystem) {
-                return index % 2 === 0 ? val.toExponential() : ''
+                return index % 2 === 0 ? val.toExponential(2) : ''
               } else {
-                return index % 2 === 0 ? val.toExponential() : ''
+                return index % 2 === 0 ? val.toExponential(2) : ''
               }
-            }
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            stepSize: 2000,
-            callback: function (val,index) {
-              return index % 2 === 0 ? val : ''
             }
           },
           grid: {
             display: true,
+            drawBorder: true,
             drawTicks: true,
+            color: function (context) {
+              if (context.tick.value === 0) {
+                return '#000000';
+              }
+              return '#c7cbd1'
+            },
           }
-        }]
-      },
-      tooltips: {
-        mode: 'nearest',
-        displayColors: false,
-        callbacks: {
-          title: function () {
-            return ''
+        },
+        y: {
+          position: 'center',
+          title: {
+            display: false,
+            text: "Pressure",
           },
-          label: function (tooltipItem) {
-            // const imperialSystemInChart = data.datasets[0].imperialSystem
-            const imperialSystemInChart = true
-            const x = parseInt(tooltipItem.xLabel).toExponential()
-            const y = parseInt(tooltipItem.yLabel)
-            const xUnit = imperialSystemInChart ? ' {ksi}' : ' {kN}'
-            const yUnit = imperialSystemInChart ? ' {lbf}' : ' {Mpa}'
-            return [
-              y >= 0 ? 'Internal pressure' + ': ' + y + yUnit: 'External Pressure' + ': ' + y + yUnit,
-              x >= 0 ? 'Tension' + ': ' + x + xUnit : 'Compression' + ': ' + x + xUnit
-            ]
+          ticks: {
+            stepSize: 2000,
+            callback: function (val,index) {
+              return index % 2 === 0 ? Math.round(val) : ''
+            }
+          },
+          grid: {
+            drawBorder: true,
+            drawTicks: true,
+            display: true,
+            color: function (context) {
+              if (context.tick.value === 0) {
+                return '#000000';
+              }
+              return '#c7cbd1'
+            },
           }
         }
       },
@@ -124,48 +130,79 @@ export default defineComponent({
             mode: "xy",
           },
         },
+        legend: {
+          display: false
+        },
+        tooltip: {
+          mode: 'nearest',
+          displayColors: false,
+          callbacks: {
+            title: function () {
+              return ''
+            },
+            label: function (tooltipItem) {
+              const imperialSystemInChart = true
+              const x = parseInt(tooltipItem?.parsed?.x).toExponential(2)
+              const y = Math.round(parseInt(tooltipItem?.parsed?.y))
+              const xUnit = imperialSystemInChart ? ' {ksi}' : ' {kN}'
+              const yUnit = imperialSystemInChart ? ' {lbf}' : ' {Mpa}'
+              return [
+                y >= 0 ? 'Internal pressure' + ': ' + y + yUnit: 'External Pressure' + ': ' + y + yUnit,
+                x >= 0 ? 'Tension' + ': ' + x + xUnit : 'Compression' + ': ' + x + xUnit
+              ]
+            }
+          }
+        }
       },
-    }));
-
-
+    });
 
     const chartData = computed(() => {
-      console.log('scatterChartRef.value', scatterChartRef.value)
-      const canvas = scatterChartRef.value?.$refs?.canvasRef
-      if (canvas?.style) {
-        const windowHeight = document.documentElement.clientHeight - 100
-        canvas.style.height = `${windowHeight}px`
-      }
-      // const newStyle = canvas.style + 'height: 600px'
-      // console.log('newStyle', newStyle)
-      // canvas.style = newStyle
-      // canvas.style = 'height: 600px'
-      console.log('scatterChartRef.value?.chartInstance', scatterChartRef.value?.chartInstance)
-      console.log('scatterChartRef.value?.chartInstance.tooltip', scatterChartRef.value?.chartInstance?.tooltip)
       return ({
       datasets: props.chartData
     })});
+
+    const height = computed(() => {
+      return document.documentElement.clientHeight - 80
+       });
 
     const { scatterChartProps, scatterChartRef } = useScatterChart({
       chartData,
       options,
     });
 
-    console.log('scatterChartRef', scatterChartRef, scatterChartRef.value)
+    /*
+    function getMinMaxForAxes() {
+      console.log('props.chartData', props.chartData)
+      if (props.chartData && props.chartData.length > 0) {
+        const allChartData = props.chartData.flatMap(data => data.data)
+        const allXData = allChartData.map(item => item.x)
+        const allYData = allChartData.map(item => item.y)
+        const xMin = Math.min.apply(null, allXData)
+        const xMax = Math.max.apply(null, allXData)
+        const yMax = Math.max.apply(null, allYData)
+        const yMin = Math.min.apply(null, allYData)
+        options.scales.x.ticks.min = Math.ceil(xMin * 1.3 / 100000) * 100000
+        options.scales.x.ticks.max = Math.ceil(xMax * 1.3 / 100000) * 100000
+        options.scales.y.ticks.min = Math.ceil(yMin * 1.3 / 1000) * 1000
+        options.scales.y.ticks.max = Math.ceil(yMax * 1.3 / 1000) * 1000
+        options.scales.x.ticks.stepSize = this.imperialSystem ? 200000 : 6000000
+      }
+    }
+     */
+
+    function handleChartRender() {
+      // const windowHeight = document.documentElement.clientHeight - 100
+    }
 
 
     function shuffleData() {
-      // data.value = shuffle(data.value);
-      // legendTop.value = !legendTop.value;
-      // imgData.value = lineChartRef.value.chartInstance.toBase64Image();
-      // lineChartRef.value.chartInstance.resetZoom();
     }
 
     function zoom() {
       scatterChartRef.value.chartInstance.zoom(1.01);
     }
 
-    return { shuffleData, scatterChartProps, scatterChartRef, imgData, zoom };
+    return { shuffleData, scatterChartProps, scatterChartRef, zoom, handleChartRender, options, chartRef, height };
   },
 });
 </script>

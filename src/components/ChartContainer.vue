@@ -1,7 +1,7 @@
 <template>
     <div class="row">
       <div class="chart-wrapper">
-        <Chart :variables="this.variables" ref="chart" :scale="axeRange" :height="height" :chartData ="chartData" :imperialSystem="imperialSystem"/>
+        <Chart :variables="this.variables" ref="chart"  :chartData ="chartData" :imperialSystem="imperialSystem"/>
       </div>
       </div>
 </template>
@@ -63,14 +63,8 @@ export default {
       }
     }
   },
-  mounted() {
-    const windowHeight = document.documentElement.clientHeight
-    console.log('windowHeight', windowHeight)
-    this.height = windowHeight -100
-  },
   methods: {
     async setChartData() {
-      console.log('imperialSystem in Chart cont', this.imperialSystem)
       let chartData = []
       for (let i=0; i < this.inputData.length; i++) {
         if (this.inputData[i].data) {
@@ -82,7 +76,6 @@ export default {
         }
       }
       this.chartData = this.buildDataset(chartData)
-      console.log('this.chartData', this.chartData)
     },
     buildDataset(chartData) {
       const dataset = chartData.map(item => {
@@ -98,7 +91,6 @@ export default {
           showLine:true
         }
       })
-      this.allChartData = dataset.flatMap(set => set.data)
       return dataset
     },
     getColor(id) {
@@ -136,8 +128,8 @@ export default {
 
     },
     async getData(properties) {
-      const url = 'http://localhost:3001'
-      // const url = 'https://dry-forest-73581.herokuapp.com/'
+      // const url = 'http://localhost:3001'
+      const url = 'https://dry-forest-73581.herokuapp.com/'
       const data = await axios.get(url, {
         params: properties
       })
